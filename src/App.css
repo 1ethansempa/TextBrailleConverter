@@ -37,7 +37,7 @@
 
 .navbar-brand{
   font-family: "Fjalla One", sans-serif!important;
-  color:forestgreen!important;
+  color:#228b22!important;
   font-weight:750;
   font-size:32px;
  }
@@ -45,7 +45,7 @@
      background-color:white!important;
  }
 ul.navbar-nav li,.nav-link{
-  color:forestgreen!important;
+  color:#555!important;
   
   
 }
@@ -224,5 +224,9 @@ button.btngray{
 .errorDiv{
   font-family: "Fjalla One", sans-serif!important;
   color:#6c757d!important;
+}
+
+.header-img-container{
+  text-align:center!important;
 }
 

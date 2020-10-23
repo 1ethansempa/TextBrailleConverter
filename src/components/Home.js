@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Form  from '../components/Form';
 import styled from 'styled-components';
+import {Link} from 'react-router-dom';
 
 const Paragraph = styled.p`
   font-size: 16px;
@@ -23,8 +24,12 @@ export default class Home extends Component {
                         <div className="col-sm-4"></div>
                         <div className="col-sm-6">
 
-                           <Heading>Welcome!</Heading>
-                             
+                           {/*<Heading>Welcome!</Heading>*/}
+                           <div className="header-img-container mb-2">
+                           <Link to="#"><img className="header-img" src="welcome-braille-font.png" alt="dots-all-for-now-font" border="0"/>
+                           </Link>
+                           </div>
+                          
                               <Paragraph>
                                 TextBrailleConverter is a way to convert pdf/word files to braille.
                                 Select an option(either document upload/audio record) to get started.
@@ -36,13 +41,11 @@ export default class Home extends Component {
           <div className="row">
                         <div className="col-sm-4"></div>
                         <div className="col-sm-6">
-                             {/*form component*/}
-                        <Form/> 
+                            {/*form component*/}
+                             <Form/> 
                             </div>
                         <div className="col-sm-4"></div>          
-          </div>  
-         
-                   
+          </div>             
 </div>
         )}
 
