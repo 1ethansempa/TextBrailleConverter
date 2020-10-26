@@ -1,24 +1,53 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Modal from '../components/Modal';
+import Select from 'react-select';
 
 const Span = styled.span`
   font-size: 16px;
   text-align: center;
-  color:#6c757d!important;
+  color:#555!important;
 `;
+
+const options = [
+  { value: '0', label: 'English Text to Grade 1' },
+  { value: '1', label: 'English Text to Grade 2' }
+]
+
+const customSelect = {
+  control: (base) => ({
+    ...base,
+    border: '1px solid #555',
+    boxShadow: 'none',
+    fontSize:16,
+    menuColor:'forestgreen',
+    width:250,
+    '&:hover': {
+        border: '1px solid forestgreen',
+    }
+}),
+  option: (provided) => ({
+    ...provided,
+    fontSize:16,
+    menuColor:'forestgreen'
+  })
+};
 
 export default class Dropzone extends Component {
   constructor(props) {
     super(props)
     this.state = { hightlight: false ,fileName:'Upload File',src:'cloudupload.png',openModal:false,
-  msg:'',heading:'',file:null,isDisabled:false,uploadState:false}
+  msg:'',heading:'',file:null,isDisabled:false,uploadState:false,showDropzone:false,showFirst:true,
+  showSecond:false,firstBtn:'Next',BrailleOption:''
+}
     this.fileInputRef = React.createRef()
     this.openFileDialog = this.openFileDialog.bind(this)
     this.onFilesAdded = this.onFilesAdded.bind(this)
     this.onDragOver = this.onDragOver.bind(this)
     this.onDragLeave = this.onDragLeave.bind(this)
     this.onDrop = this.onDrop.bind(this)
+    this.onInputChange = this.onInputChange.bind(this);
+
     
   }
 
@@ -114,21 +143,40 @@ export default class Dropzone extends Component {
       this.setState({heading: "Error",msg:'No file uploaded' })
     }
     this.toggleModal();
-    this.trueDisabled();  
-   
+    this.trueDisabled();    
+  }
+
+  onInputChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  }
+
+  showNext=(e)=>{
+    this.setState({showSecond:!this.state.showSecond,showFirst:!this.state.showFirst,firstBtn:`${!this.state.showFirst ? 'Next':'Back'}`})
   }
   
   render() {
     return (
-      <div className="App">
+      <div className="App mb-2">
       <div className="Card">
-      <form>
-      <div
-        className={`Dropzone ${this.state.hightlight ? 'Highlight' : ''}`}
+      <form id="BrailleForm">
+
+      <div className="form-group">
+
+
+
+        <label className={`${this.state.showFirst ? '':'d-none'}`}>Select Braille Option:</label>
+      <Select id="BrailleOption" className={`${this.state.showFirst ? '':'d-none'}`} name="BrailleOption" 
+      options={options} styles={customSelect} isSearchable={true} isClearable={true} />
+      </div>
+
+
+
+      
+      <div className={`Dropzone ${this.state.hightlight ? 'Highlight' : ''} ${this.state.showSecond ? '':'d-none'}`}
         onDragOver={this.onDragOver} onDragLeave={this.onDragLeave}
-        onDrop={this.onDrop} onClick={this.openFileDialog}
-        style={{ cursor:  'pointer' }}
-        >
+        onDrop={this.onDrop} onClick={this.openFileDialog} style={{ cursor:  'pointer' }}>
         <input ref={this.fileInputRef} className="FileInput" type="file"
           accept=".docx, .doc,.pdf" onChange={this.onFilesAdded} value={this.state.file} required />
         <img alt="upload" className="Icon" src={this.state.src}/>
@@ -136,9 +184,13 @@ export default class Dropzone extends Component {
         <Modal toggle = {this.toggleModal}
           openModal={this.state.openModal} heading={this.state.heading} text={this.state.msg}  
           uploadState={this.state.uploadState} isDisabled={false}/>
-      
       </div>
-      <button className="btn" type="submit" onClick={this.handleValidation}>Convert</button>
+      <div className="d-flex"
+      >
+      <button className="btn mr-2"  type="button" onClick={this.showNext}>{this.state.firstBtn}</button>
+
+      <button className={`btn mr-2 ${this.state.showSecond ? '':'disabled d-none'}`} type="submit" onClick={this.handleValidation}>Convert</button>
+      </div>
             </form>
             </div>
           </div>  
