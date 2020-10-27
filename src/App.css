@@ -189,6 +189,7 @@ button.btn {
   margin-top:20px;
   color: #fff;
   outline: 0;
+  left: 0;
 }
 
 button.btn:disabled {
@@ -259,6 +260,20 @@ button.disabled{
 .errorSpan{
   color:red;
   font-size:16px;
- float:left;
+  text-align: left;
+float: left;
+}
 
+small{
+  font-size:14px;
+  text-align: left;
+float: left;
+}
+
+.form-control{
+  border:1px solid #555;
+}
+.form-control:hover,.form-control:focus{
+  box-shadow:none;
+  border:1px solid forestgreen;
 }

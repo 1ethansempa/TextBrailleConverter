@@ -38,7 +38,7 @@ export default class Dropzone extends Component {
     super(props)
     this.state = { hightlight: false ,fileName:'Upload File',src:'cloudupload.png',openModal:false,
   msg:'',heading:'',file:null,isDisabled:false,uploadState:false,showDropzone:false,showFirst:true,
-  showSecond:false,firstBtn:'Next',BrailleOption:null,BrailleOptionError:false
+  showSecond:false,firstBtn:'Next',BrailleOption:null,BrailleOptionError:false,BrailleFont:24
 }
     this.fileInputRef = React.createRef()
     this.openFileDialog = this.openFileDialog.bind(this)
@@ -152,6 +152,12 @@ export default class Dropzone extends Component {
     console.log(`Option selected:`, BrailleOption);
   };
 
+  checkNumber = event=>{
+    let { value, min, max } = event.target;
+    value = Math.max(Number(min), Math.min(Number(max), Number(value)));
+    this.setState({ BrailleFont:value });
+  }
+
   showNext=(e)=>{
     if(this.state.BrailleOption===null||undefined||''){
         this.setState({BrailleOptionError:true})
@@ -178,11 +184,15 @@ export default class Dropzone extends Component {
       <Select id="BrailleOption" className={`${this.state.showFirst ? '':'d-none'}`} name="BrailleOption" 
       options={options} styles={customSelect} isSearchable={true} isClearable={true} value={BrailleOption}
       onChange={this.onInputChange} />
-       {this.state.BrailleOptionError ? <div><span className='errorSpan'>Please Select Option</span><br/></div> : ''} 
+       {this.state.BrailleOptionError ? <div><span className='errorSpan'>Please Select Option</span></div> : ''} 
       </div>
 
-
-
+      <div className="form-group">
+     <label className={`${this.state.showFirst ? '':'d-none'}`}>Select Braille Font Size:</label>
+    <input type="number" min="10" max="65" value={this.state.BrailleFont} className={`form-control ${this.state.showFirst ? '':'d-none'}`} placeholder="Enter font size" onChange={this.checkNumber}/>
+    <small className={`text-muted ${this.state.showFirst ? '':'d-none'}`}>Select font size between 10 and 65</small><br/>
+    
+    </div>
       
       <div className={`Dropzone ${this.state.hightlight ? 'Highlight' : ''} ${this.state.showSecond ? '':'d-none'}`}
         onDragOver={this.onDragOver} onDragLeave={this.onDragLeave}
@@ -195,8 +205,7 @@ export default class Dropzone extends Component {
           openModal={this.state.openModal} heading={this.state.heading} text={this.state.msg}  
           uploadState={this.state.uploadState} isDisabled={false}/>
       </div>
-      <div className="d-flex"
-      >
+      <div className="d-flex">
       <button className="btn mr-2"  type="button" onClick={this.showNext}>{this.state.firstBtn}</button>
 
       <button className={`btn mr-2 ${this.state.showSecond ? '':'disabled d-none'}`} type="submit" onClick={this.handleValidation}>Convert</button>
