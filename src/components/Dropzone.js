@@ -38,7 +38,7 @@ export default class Dropzone extends Component {
     super(props)
     this.state = { hightlight: false ,fileName:'Upload File',src:'cloudupload.png',openModal:false,
   msg:'',heading:'',file:null,isDisabled:false,uploadState:false,showDropzone:false,showFirst:true,
-  showSecond:false,firstBtn:'Next',BrailleOption:''
+  showSecond:false,firstBtn:'Next',BrailleOption:null,BrailleOptionError:false
 }
     this.fileInputRef = React.createRef()
     this.openFileDialog = this.openFileDialog.bind(this)
@@ -146,17 +146,25 @@ export default class Dropzone extends Component {
     this.trueDisabled();    
   }
 
-  onInputChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  }
+  onInputChange = BrailleOption => {
+    this.setState({ BrailleOption });
+
+    console.log(`Option selected:`, BrailleOption);
+  };
 
   showNext=(e)=>{
-    this.setState({showSecond:!this.state.showSecond,showFirst:!this.state.showFirst,firstBtn:`${!this.state.showFirst ? 'Next':'Back'}`})
+    if(this.state.BrailleOption===null||undefined||''){
+        this.setState({BrailleOptionError:true})
+    }
+    else{
+      this.setState({showSecond:!this.state.showSecond,showFirst:!this.state.showFirst,
+        firstBtn:`${!this.state.showFirst ? 'Next':'Back'}`,BrailleOptionError:false})
+    }
+  
   }
   
   render() {
+    const BrailleOption=this.state.BrailleOption;
     return (
       <div className="App mb-2">
       <div className="Card">
@@ -168,7 +176,9 @@ export default class Dropzone extends Component {
 
         <label className={`${this.state.showFirst ? '':'d-none'}`}>Select Braille Option:</label>
       <Select id="BrailleOption" className={`${this.state.showFirst ? '':'d-none'}`} name="BrailleOption" 
-      options={options} styles={customSelect} isSearchable={true} isClearable={true} />
+      options={options} styles={customSelect} isSearchable={true} isClearable={true} value={BrailleOption}
+      onChange={this.onInputChange} />
+       {this.state.BrailleOptionError ? <div><span className='errorSpan'>Please Select Option</span><br/></div> : ''} 
       </div>
 
 
