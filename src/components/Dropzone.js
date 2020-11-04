@@ -208,7 +208,7 @@ export default class Dropzone extends Component {
       <div className="d-flex">
       <button className="btn mr-2"  type="button" onClick={this.showNext}>{this.state.firstBtn}</button>
 
-      <button className={`btn mr-2 ${this.state.showSecond ? '':'disabled d-none'}`} type="submit" onClick={this.handleValidation}>Convert</button>
+      <button className={`btn mr-2 ${this.state.showSecond ? '':'disabled d-none'}`} type="submit" onClick={this.handleValidation}>Proceed</button>
       </div>
             </form>
             </div>

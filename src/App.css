@@ -90,7 +90,11 @@ margin-left:35%!important;
   box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.11), 0 5px 15px 0 rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
   min-height: 50vh;
+}
 
+.correctFormP{
+ font-size: 16px;
+ line-height: 1.2;
 }
 
 .Dropzone {
@@ -192,9 +196,42 @@ button.btn {
   left: 0;
 }
 
+.btn1{
+width:44px!important;
+font-family: "Fjalla One", sans-serif!important;
+  font-size: 18px;
+  display: inline-block;
+  height: 36px;
+  padding: 6px 16px;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 2px solid #228b22;
+  border-radius: 2px;
+  background: #fff;
+  margin-top:20px;
+  color: forestgreen;
+  outline: 0;
+  left: 0;
+}
+button.btn1:hover,button.btn1:focus,button.btn1:active{
+  box-shadow: none;
+  box-sizing: border-box; 
+  border:2px solid forestgreen!important;
+}
+
 button.btn:disabled {
   background: rgb(189, 189, 189);
   cursor: default;
+
 }
 
 button.btn:hover{

@@ -5,6 +5,7 @@ import  Default from './components/Default'
 import Home  from './components/Home'
 import Navbar from './components/Navbar'
 import Help from './components/Help'
+import Nlp from './components/Nlp'
 
 
 
@@ -15,6 +16,7 @@ function App() {
    <Switch>
    <Route exact path="/" component={Home}/>
      <Route path="/Help" component={Help}/>
+     <Route path="/CorrectForm" component={Nlp}/>
      <Route component={Default}/>
    </Switch>
  </React.Fragment>
