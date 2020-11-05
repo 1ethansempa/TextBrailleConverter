@@ -7,7 +7,7 @@ export default class Nlp extends Component {
     constructor(props) {
         super(props)
         this.state = { sentencesCount:sentences.length,disableNext:this.CheckNext(),disablePrevious:true,errorPage:this.setErrorPage()
-        ,errorMsg:this.setErrorMsg()}
+        ,errorMsg:this.setErrorMsg(),sentences:sentences}
         
     }
 
@@ -44,22 +44,25 @@ export default class Nlp extends Component {
             if(sentences.length>this.state.errorPage){
             this.setState({disablePrevious:false,errorMsg:sentences[this.state.errorPage],errorPage:this.state.errorPage+1})
             }
-            else if((this.state.errorPage-1)===(sentences.length-1)){
-            this.setState({disbaleNext:true})
+            if(this.state.errorPage ===(sentences.length-1)){
+                this.setState({disableNext:true})
             }
             
     }
 
     prevErrorPage=(e)=>{
         if(this.state.errorPage>1){
-            this.setState({errorMsg:sentences[(this.state.errorPage)-2],errorPage:this.state.errorPage-1})
+            this.setState({errorMsg:sentences[(this.state.errorPage)-2],errorPage:this.state.errorPage-1,disableNext:false})
         }
         if(this.state.errorPage===2){
-            this.setState({disablePrevious:true})
+            this.setState({disablePrevious:true,disableNext:false})
         }
        
     }
-
+    
+    updateSentence=(e)=>{
+       
+    }
     render() {
         return (
     <div className="App mb-2">
@@ -71,7 +74,7 @@ export default class Nlp extends Component {
     <small className="text-muted">Click Next(>>) if sentence was intended</small><br/>
     <label for="sentence">Sentence</label>
     <span className="correctFormP"style={{float:'right'}}><span>{this.state.errorPage}</span>/<span>{this.state.sentencesCount}</span></span>
-    <textarea className="form-control" id="sentence" rows="5" value={this.state.errorMsg}></textarea>
+    <textarea className="form-control" id="sentence" rows="5" value={this.state.sentences[this.state.errorPage-1]} onChange={this.updateSentence}></textarea>
     <div style={{float:'right'}}>
     <button className={`mr-2 btn1 ${this.state.disablePrevious ? 'd-none':''}`} type="button" onClick={this.prevErrorPage}><i className="fas fa-angle-double-left"></i></button>
             <button className={`mr-2 btn1 ${this.state.disableNext ? 'd-none':''}`} type="button" onClick={this.nextErrorPage}><i className="fas fa-angle-double-right"></i></button>

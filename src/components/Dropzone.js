@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import Modal from '../components/Modal';
 import Select from 'react-select';
+import axios from 'axios';
 
 const Span = styled.span`
   font-size: 16px;
@@ -47,8 +48,8 @@ export default class Dropzone extends Component {
     this.onDragLeave = this.onDragLeave.bind(this)
     this.onDrop = this.onDrop.bind(this)
     this.onInputChange = this.onInputChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
 
-    
   }
 
   
@@ -65,11 +66,15 @@ export default class Dropzone extends Component {
     return
     const files = evt.target.files
     var name = this.fileInputRef.current.files[0].name;
-  var ext = name.substring(name.lastIndexOf(".") + 1);
+     var ext = name.substring(name.lastIndexOf(".") + 1);
     if (this.props.onFilesAdded) {
       if(ext==="docx"||ext==="doc"||ext==="pdf"){
         const array = this.fileListToArray(files)
         this.props.onFilesAdded(array)
+        this.setState({file:this.fileInputRef.current.files[0]})
+        console.log(this.state.file)
+        
+       
       }
       else{
 
@@ -136,14 +141,7 @@ export default class Dropzone extends Component {
   })
 
   handleValidation= (event) => {
-    if(this.state.file!==null){
-      this.setState({heading: "Success",msg:'File uploaded successfully',uploadState:true })
-    }
-    else{
-      this.setState({heading: "Error",msg:'No file uploaded' })
-    }
-    this.toggleModal();
-    this.trueDisabled();    
+     
   }
 
   onInputChange = BrailleOption => {
@@ -168,13 +166,36 @@ export default class Dropzone extends Component {
     }
   
   }
+
+  handleSubmit(event) {
+    event.preventDefault();
+   
+    if(this.state.file!==null){
+      axios.post(`http://192.168.43.115:5000/api/test`, {
+        BrailleOption:this.state.BrailleOption,
+        BrailleFont:this.state.BrailleFont,
+        Upload_File:this.state.file
+      })
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+      this.setState({heading: "Success",msg:'File uploaded successfully',uploadState:true })
+    }
+    else{
+      this.setState({heading: "Error",msg:'No file uploaded' })
+    }
+    this.toggleModal();
+    this.trueDisabled(); 
+    
+  }
   
   render() {
     const BrailleOption=this.state.BrailleOption;
     return (
       <div className="App mb-2">
       <div className="Card">
-      <form id="BrailleForm">
+      <form id="BrailleForm" autoComplete="off" onSubmit={this.handleSubmit}>
 
       <div className="form-group">
 
@@ -208,7 +229,7 @@ export default class Dropzone extends Component {
       <div className="d-flex">
       <button className="btn mr-2"  type="button" onClick={this.showNext}>{this.state.firstBtn}</button>
 
-      <button className={`btn mr-2 ${this.state.showSecond ? '':'disabled d-none'}`} type="submit" onClick={this.handleValidation}>Proceed</button>
+      <button className={`btn mr-2 ${this.state.showSecond ? '':'disabled d-none'}`} type="submit">Proceed</button>
       </div>
             </form>
             </div>
