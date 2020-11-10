@@ -32,8 +32,8 @@ export default class Home extends Component {
                            </div>
                           
                               <Paragraph>
-                                TextBrailleConverter is a platform that enables conversion of a pdf/ word document
-                                to braille notation. Select an option and upload a document to get started.
+                                TextBrailleConverter is a platform that enables conversion of pdf documents and audio files
+                                to braille notation. Select an option to get started.
                               </Paragraph>
                             </div>
                          

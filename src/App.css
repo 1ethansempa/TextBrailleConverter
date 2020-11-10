@@ -308,9 +308,90 @@ float: left;
 }
 
 .form-control{
-  border:1px solid #555;
+  border:1px solid rgb(160, 160, 160);
 }
 .form-control:hover,.form-control:focus{
   box-shadow:none;
   border:1px solid forestgreen;
+}
+
+.audioIcon{
+  max-height:35px!important;
+  max-width:35px!important;
+}
+.leftIcon{
+ float: left!important;
+ position:relative;
+ text-align: left;
+}
+button#audioBtn{
+  padding: 0;
+border: none;
+background: none;
+outline:none;
+}
+
+button#audioBtn:focus { outline: none; }
+
+#recordDiv{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0;
+  padding:0;
+}
+
+.roundBtn-green{
+  color:#228b22;
+  font-weight:300;
+  border-radius:50%;
+  border:2px solid #228b22;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  padding:10px;
+  background:none;
+}
+
+.roundBtn-red{
+  color:red;
+  font-weight:300!important;
+  border-radius:50%;
+  border:2px solid red;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  padding:10px;
+  background:none;
+}
+.roundBtn-red:hover,.roundBtn-red:focus{
+  transform:scale(1.1);
+  outline:0;
+  border:0px;
+  color:#fff;
+  background-color:red;
+  opacity:0.65;
+}
+.roundBtn-green:hover,.roundBtn-green:focus{
+  transform:scale(1.1);
+  outline:0;
+  border:0px;
+  color:#fff;
+  background-color:#228b22;
+  opacity:0.65;
+}
+
+#trashBtn{
+  padding: 0;
+  border: none;
+  background: none;
+  outline:none;
+  color:red;
+}
+#audioIcon:hover{
+  transform:scale(1.1);
+}
+
+#trashBtn:hover,#trashBtn:focus{
+  transform:scale(1.1);
 }

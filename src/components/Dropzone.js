@@ -12,7 +12,10 @@ const Span = styled.span`
 
 const options = [
   { value: '0', label: 'English Text to Grade 1' },
-  { value: '1', label: 'English Text to Grade 2' }
+  { value: '1', label: 'English Text to Grade 2' },
+  { value: '2', label: 'English Speech to Grade 1' },
+  { value: '3', label: 'English Text to Grade 2' },
+  { value: '4', label: 'Luganda Text to Grade 1' }
 ]
 
 const customSelect = {
@@ -39,7 +42,7 @@ export default class Dropzone extends Component {
     super(props)
     this.state = { hightlight: false ,fileName:'Upload File',src:'cloudupload.png',openModal:false,
   msg:'',heading:'',file:null,isDisabled:false,uploadState:false,showDropzone:false,showFirst:true,
-  showSecond:false,firstBtn:'Next',BrailleOption:null,BrailleOptionError:false,BrailleFont:24
+  showSecond:false,firstBtn:'Next',BrailleOption:null,BrailleOptionError:false,BrailleFont:37
 }
     this.fileInputRef = React.createRef()
     this.openFileDialog = this.openFileDialog.bind(this)
@@ -49,10 +52,8 @@ export default class Dropzone extends Component {
     this.onDrop = this.onDrop.bind(this)
     this.onInputChange = this.onInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
   }
 
-  
   openFileDialog() {
     this.setState({
       isDisabled: false
@@ -60,19 +61,25 @@ export default class Dropzone extends Component {
     if (this.state.isDisabled) return;
     this.fileInputRef.current.click();
   }
+
+ 
+
   
   onFilesAdded(evt) {
     if (this.state.isDisabled) 
     return
     const files = evt.target.files
+   
     var name = this.fileInputRef.current.files[0].name;
      var ext = name.substring(name.lastIndexOf(".") + 1);
     if (this.props.onFilesAdded) {
       if(ext==="docx"||ext==="doc"||ext==="pdf"){
         const array = this.fileListToArray(files)
         this.props.onFilesAdded(array)
-        this.setState({file:this.fileInputRef.current.files[0]})
-        console.log(this.state.file)
+        
+        this.setState({file: files}, () => {
+          console.log('file', this.state.file);
+      })
         
        
       }
@@ -169,13 +176,22 @@ export default class Dropzone extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-   
+   let formData = new FormData();
+   formData.append('Upload_File',this.fileInputRef.current.files[0])
+   formData.append('BrailleFont',this.state.BrailleFont)
+   formData.append('BrailleOption',this.state.BrailleOption.value)
+    for(var i of formData){
+      let name=i[0]
+      let value=i[1]
+
+        console.log(name+':'+value)
+    }
+   const config = {     
+    headers: { 'content-type': 'multipart/form-data' }
+}
+
     if(this.state.file!==null){
-      axios.post(`http://192.168.43.115:5000/api/test`, {
-        BrailleOption:this.state.BrailleOption,
-        BrailleFont:this.state.BrailleFont,
-        Upload_File:this.state.file
-      })
+      axios.post(`http://192.168.43.115:5000/`,formData,config)
       .then(res => {
         console.log(res);
         console.log(res.data);
@@ -211,7 +227,7 @@ export default class Dropzone extends Component {
       <div className="form-group">
      <label className={`${this.state.showFirst ? '':'d-none'}`}>Select Braille Font Size:</label>
     <input type="number" min="10" max="65" value={this.state.BrailleFont} className={`form-control ${this.state.showFirst ? '':'d-none'}`} placeholder="Enter font size" onChange={this.checkNumber}/>
-    <small className={`text-muted ${this.state.showFirst ? '':'d-none'}`}>Select font size between 10 and 65</small><br/>
+    <small className={`text-muted ${this.state.showFirst ? '':'d-none'}`}>Recommended Braille font size is 37px</small><br/>
     
     </div>
       
