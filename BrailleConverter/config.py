@@ -17,3 +17,4 @@ class DevelopmentConfig(Config):
     PDF_UPLOADS = os.environ.get("PDF_UPLOADS")
     TEXT_FILE = os.environ.get("TEXT_FILE")
     FINAL_OUTPUT = os.environ.get("FINAL_OUTPUT")
+    AUDIO_TEXT = os.environ.get("AUDIO_TEXT")
