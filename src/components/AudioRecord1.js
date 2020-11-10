@@ -7,9 +7,11 @@ export default class AudioRecord1 extends Component {
     constructor(props){
         super(props)
         this.state={micClicked:false,startRecording:false,stopRecording:false,blobURL: '',
-            showRecording:false,isBlocked: false, showRecordBtns:false, audioLabel:'Click button below to record Audio:'
+            showRecording:false,isBlocked: false, showRecordBtns:false, audioLabel:'Click button below to record Audio:',
+            minutes:0,seconds:0
         }
     }
+    
     componentDidMount(){
       navigator.getUserMedia = ( navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||
@@ -25,17 +27,43 @@ export default class AudioRecord1 extends Component {
               this.setState({ isBlocked: true })
             },
           );
+          this.myInterval=setInterval(()=>{
+            const {seconds,minutes} =this.state
+
+            if(seconds>=0&&seconds <59){
+              this.setState(prevState=>({
+                seconds:prevState.seconds +1
+              }))
+            }
+            else if(seconds===59){
+              
+              this.setState(prevState=>({
+                seconds:0,
+                minutes:prevState.minutes+1
+              }))
+              if(minutes===1){
+                this.triggerStopRecording1()
+              }
+            }
+           
+            
+           
+          },1000)
     }
- 
+
+    componentWillUnmount(){
+      clearInterval(this.myInterval)
+    }
+
     triggerStartRecording=(e)=>{
         console.log("Mic was clicked")
-       this.setState({micClicked:true,showRecordBtns:true,audioLabel:'Click right button to save or left to cancel:'})
+       this.setState({micClicked:true,showRecordBtns:true,audioLabel:'Click right button to save or left to cancel:',seconds:0})
        this.start()
         
     }
     triggerStopRecording1=(e)=>{
         console.log('Recording was stopped and saved')
-        this.setState({showRecordBtns:false,stopRecording:true})
+        this.setState({showRecordBtns:false,stopRecording:true,seconds:0,minutes:0})
         this.stop()
     }
     
@@ -48,6 +76,8 @@ export default class AudioRecord1 extends Component {
           .then(() => {
             this.setState({ startRecording: true });
           }).catch((e) => console.error(e));
+       
+          
       }
    }
 
@@ -64,14 +94,12 @@ export default class AudioRecord1 extends Component {
       };
 
       deleteAudio=()=>{
-        this.setState({showRecording:false,blobURL:'',startRecording:false,
+        this.setState({showRecording:false,blobURL:'',startRecording:false,seconds:0,minutes:0,
         stopRecording:false,micClicked:false,showRecordBtns:false,audioLabel:'Click button below to record Audio:'})
       }
-
-
-   
-     
+ 
     render() {
+      const {minutes, seconds}=this.state
         return (
             <div className="App mb-2">
         
@@ -79,6 +107,7 @@ export default class AudioRecord1 extends Component {
             <div className="form-group">
                <label>{this.state.audioLabel}</label><br/>
                <small className={`text-muted ${this.state.micClicked ? 'd-none':''}`}>Max record time is 2 minutes</small>
+               <small className={`text-muted ${this.state.showRecordBtns ? '':'d-none'}`}>Please be audible</small>
                <div className="mt-5">
                 <button id="audioBtn" className={`${this.state.micClicked  ? 'd-none' :''}`} onClick={this.triggerStartRecording}>
                 <img className="audioIcon" alt="upload" src="mic2.png"/>
@@ -88,7 +117,8 @@ export default class AudioRecord1 extends Component {
                 <i className="fas fa-times"></i>
                 </button>
                 <div className="audio-timer mr-2">
-                <span><span>0 : 00</span></span>
+                <span className="timer"><span><button id="blinkingDot" className="mr-2"></button>{minutes} :
+                 {seconds.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}</span></span>
                 </div>
                 <button className="roundBtn-green" onClick={this.triggerStopRecording1}>
                 <i className="fas fa-check"></i>

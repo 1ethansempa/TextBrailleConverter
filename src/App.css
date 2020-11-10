@@ -354,10 +354,10 @@ button#audioBtn:focus { outline: none; }
 }
 
 .roundBtn-red{
-  color:red;
+  color:#CC0000;
   font-weight:300!important;
   border-radius:50%;
-  border:2px solid red;
+  border:2px solid #CC0000;
   display:flex;
   justify-content: center;
   align-items: center;
@@ -369,8 +369,8 @@ button#audioBtn:focus { outline: none; }
   outline:0;
   border:0px;
   color:#fff;
-  background-color:red;
-  opacity:0.65;
+  background-color:#CC0000;
+  opacity:0.8;
 }
 .roundBtn-green:hover,.roundBtn-green:focus{
   transform:scale(1.1);
@@ -378,7 +378,7 @@ button#audioBtn:focus { outline: none; }
   border:0px;
   color:#fff;
   background-color:#228b22;
-  opacity:0.65;
+  opacity:0.8;
 }
 
 #trashBtn{
@@ -386,7 +386,7 @@ button#audioBtn:focus { outline: none; }
   border: none;
   background: none;
   outline:none;
-  color:red;
+  color:#CC0000;
 }
 #audioIcon:hover{
   transform:scale(1.1);
@@ -394,4 +394,38 @@ button#audioBtn:focus { outline: none; }
 
 #trashBtn:hover,#trashBtn:focus{
   transform:scale(1.1);
+}
+@keyframes up-right {
+  0% {
+      transform: scale(1);
+      opacity: .25
+  }
+  50% {
+      transform: scale (1, 5);
+      opacity: .75;
+  }
+  100% {
+      transform: scale(1);
+      opacity: .25;
+  }
+}
+#blinkingDot{
+  background:#CC0000;
+  border-radius:50%;
+  height:13px;
+  width:13px;
+  border:0;
+  -webkit-animation: up-right 1s infinite;
+    -moz-animation: up-right 1s infinite;
+    -o-animation: up-right 1s infinite;
+    animation: up-right 1s infinite;
+}
+audio:hover,audio:focus{
+  border:0;
+  outline:none;
+}
+
+.timer{
+  color:#555;
+  opacity:0.8;
 }
