@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import MicRecorder from 'mic-recorder-to-mp3';
 
+
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 export default class AudioRecord1 extends Component {
     
@@ -44,10 +45,7 @@ export default class AudioRecord1 extends Component {
               if(minutes===1){
                 this.triggerStopRecording1()
               }
-            }
-           
-            
-           
+            }  
           },1000)
     }
 
@@ -71,6 +69,7 @@ export default class AudioRecord1 extends Component {
       if (this.state.isBlocked) {
         console.log('Permission Denied');
       } else {
+        
         Mp3Recorder
           .start()
           .then(() => {
@@ -88,7 +87,9 @@ export default class AudioRecord1 extends Component {
           .then(([buffer, blob]) => {
            
             const blobURL = URL.createObjectURL(blob)
+            
             console.log(blobURL)
+            
             this.setState({ blobURL, startRecording: false,showRecording:true, audioLabel:'Click Proceed to Continue:' });
           }).catch((e) => console.log(e));
       };
@@ -101,10 +102,8 @@ export default class AudioRecord1 extends Component {
     render() {
       const {minutes, seconds}=this.state
         return (
-            <div className="App mb-2">
-        
-            <div className="Card">
-            <div className="form-group">
+           
+            <div className={`form-group ${this.props.showRecordAudio ? '': 'd-none'}`}>
                <label>{this.state.audioLabel}</label><br/>
                <small className={`text-muted ${this.state.micClicked ? 'd-none':''}`}>Max record time is 2 minutes</small>
                <small className={`text-muted ${this.state.showRecordBtns ? '':'d-none'}`}>Please be audible</small>
@@ -132,9 +131,6 @@ export default class AudioRecord1 extends Component {
                 <i className="fa fa-trash"></i>
                 </button>
                </div>
-               
-            </div>
-            </div>
             </div>
         )
     }

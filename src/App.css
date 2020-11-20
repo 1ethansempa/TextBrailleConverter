@@ -276,9 +276,9 @@ button.btngray{
 }
 
 label{
-  font-size:18px;
-  font-weight:700;
-  font-family: "Fjalla One", sans-serif!important;
+font-size:18px;
+font-weight:700;
+font-family: "Fjalla One", sans-serif!important;
 color:#555;
 text-align: left;
 float: left;
@@ -412,8 +412,8 @@ button#audioBtn:focus { outline: none; }
 #blinkingDot{
   background:#CC0000;
   border-radius:50%;
-  height:13px;
-  width:13px;
+  height:15px;
+  width:15px;
   border:0;
   -webkit-animation: up-right 1s infinite;
     -moz-animation: up-right 1s infinite;
@@ -429,3 +429,50 @@ audio:hover,audio:focus{
   color:#555;
   opacity:0.8;
 }
+
+.radioBtns{
+color:#555;
+ font-size: 16px;
+ position:absolute;
+}
+.radio{
+position:relative;
+float:left;
+text-align:left;
+}
+
+input[type="radio"] {
+  /* remove standard background appearance */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* create custom radiobutton appearance */
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  padding: 2px;
+  /* background-color only for content */
+  background-clip: content-box;
+  border: 2px solid rgba(85,85,85,0.4);
+  background-color: transparent;
+  border-radius: 50%;
+}
+
+input[type="radio"]:checked {
+  background-color: forestgreen;
+}
+
+input[type="radio"]:hover,input[type="radio"]:focus{
+  
+  outline:none;
+}
+
+.form-btns{
+
+float:left;
+text-align:left;
+}
+.d-none1{
+  display:none!important;
+}
+
