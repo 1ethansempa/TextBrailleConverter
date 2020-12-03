@@ -1,6 +1,8 @@
 from flask import Blueprint,render_template,  request
 from flask import current_app
 import speech_recognition  as sr
+from BrailleConverter.Grade1Processing import Grade1Conversion # Import the file with Grade 1 conversion  
+from BrailleConverter.Grade2Processing import Grade2Conversion #Import the file with Grade 2 Conversion
 import os
 
 
@@ -21,6 +23,16 @@ def Home():
 def Convert():
         
         Audio = request.files['Upload_File'] # Get Uploaded File
+
+        FontSize = request.form['BrailleFont'] # Get the Font Size
+        print(FontSize)
+
+        BrailleGrade =  request.form['BrailleOption']
+        print(BrailleGrade)
+        """ 
+        FontSize = 24
+        BrailleGrade = "1"
+        """
 
         #The recognizer class helps in recognizing of speech
         Record = sr.Recognizer() # This creates an instance of the recognizer class
@@ -44,9 +56,16 @@ def Convert():
 
                 except sr.UnknownValueError:
                         print("File was not clear")
-                        
 
+        BrailleOutput = os.path.join(current_app.config['FINAL_OUTPUT']) # specify where u want ur text to be written to
+               
 
+        if BrailleGrade ==  "0":
+                Grade1Conversion.converttograde1(TextFile, BrailleOutput)
+        else:
+                Output = Grade2Conversion.converttograde2(TextFile)
+                with open(BrailleOutput, "a", encoding="utf-8") as BrailleText: # Open a Braille Output text file as  append type
+                        BrailleText.write(Output) 
         
 
         return '<h1> ALL GOOD</h1>'  

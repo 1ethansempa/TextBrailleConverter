@@ -16,17 +16,6 @@ CORS(TextBraille)
 # Installed Poppler Binaries which is necessary in pdf to image Conversion
 #using conda install -c conda-forge poppler
 
-@TextBraille.route('/api/test', methods= ["POST"])
-
-def Test():
-        FormData = request.json
-        print(FormData)
-
-        Pdf = FormData["BrailleFont"] # Get Uploaded File
-        print(Pdf)
-
-        return jsonify(Pdf)
-
 @TextBraille.route('/', methods = ["GET"])
 
 def Home():
@@ -38,13 +27,12 @@ def Home():
 def Convert():
         pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' #pointing to the binaries installed
         
-        
         FontSize = request.form['BrailleFont'] # Get the Font Size
         print(FontSize)
 
         BrailleGrade =  request.form['BrailleOption']
         print(BrailleGrade)
-        """
+        """ 
         FontSize = 24
         BrailleGrade = "1"
         """
@@ -68,7 +56,6 @@ def Convert():
                 Images =  Functions.pdftoimage(current_app.config['PDF_UPLOADS'] + "/" + Pdf.filename) #Call the Image Prep processing function to convert the Pdf to Image
 
         except UnicodeDecodeError:
-                #
                 pass
 
         for Image in Images:
