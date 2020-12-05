@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import MicRecorder from 'mic-recorder-to-mp3';
 
-
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 export default class AudioRecord1 extends Component {
     
@@ -9,55 +8,38 @@ export default class AudioRecord1 extends Component {
         super(props)
         this.state={micClicked:false,startRecording:false,stopRecording:false,blobURL: '',
             showRecording:false,isBlocked: false, showRecordBtns:false, audioLabel:'Click button below to record Audio:',
-            minutes:0,seconds:0
+            minutes:0,seconds:0,file:null
         }
     }
-    
-    componentDidMount(){
-      navigator.getUserMedia = ( navigator.getUserMedia ||
+   //componentDidMount(){}
+    //componentWillUnmount(){}
+    saveAudio = (file)=>{
+      this.props.setAudioFile(file)
+    }
+
+    triggerStartRecording=(e)=>{
+        console.log("Mic was clicked")
+       navigator.getUserMedia = ( navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia ||
         navigator.msGetUserMedia);
         navigator.getUserMedia({ audio: true },
             () => {
               console.log('Permission Granted');
-              this.setState({ isBlocked: false });
+              this.setState({ isBlocked: false,
+                micClicked:true,showRecordBtns:true,
+                audioLabel:'Click right button to save or left to cancel:',
+                seconds:0 },()=>{
+                this.start()  
+              });
             },
             () => {
               console.log('Permission Denied');
-              this.setState({ isBlocked: true })
+              this.setState({ isBlocked: true },()=>{
+                this.start()  
+              })
             },
-          );
-          this.myInterval=setInterval(()=>{
-            const {seconds,minutes} =this.state
-
-            if(seconds>=0&&seconds <59){
-              this.setState(prevState=>({
-                seconds:prevState.seconds +1
-              }))
-            }
-            else if(seconds===59){
-              
-              this.setState(prevState=>({
-                seconds:0,
-                minutes:prevState.minutes+1
-              }))
-              if(minutes===1){
-                this.triggerStopRecording1()
-              }
-            }  
-          },1000)
-    }
-
-    componentWillUnmount(){
-      clearInterval(this.myInterval)
-    }
-
-    triggerStartRecording=(e)=>{
-        console.log("Mic was clicked")
-       this.setState({micClicked:true,showRecordBtns:true,audioLabel:'Click right button to save or left to cancel:',seconds:0})
-       this.start()
-        
+          ); 
     }
     triggerStopRecording1=(e)=>{
         console.log('Recording was stopped and saved')
@@ -69,40 +51,59 @@ export default class AudioRecord1 extends Component {
       if (this.state.isBlocked) {
         console.log('Permission Denied');
       } else {
+        this.props.showProceedBtn(1)
+        this.myInterval=setInterval(()=>{
+          const {seconds,minutes} =this.state
+
+          if(seconds>=0&&seconds <59){
+            this.setState(prevState=>({
+              seconds:prevState.seconds +1
+            }))
+          }
+          else if(seconds===59){
+            this.setState(prevState=>({
+              seconds:0,
+              minutes:prevState.minutes+1
+            }))
+            if(minutes===1){
+              this.triggerStopRecording1()
+            }
+          }  
+        },1000)
         
-        Mp3Recorder
-          .start()
-          .then(() => {
+        Mp3Recorder.start().then(() => {
             this.setState({ startRecording: true });
-          }).catch((e) => console.error(e));
-       
-          
+          }).catch((e) => console.error(e));  
       }
    }
 
-      stop = () => {
+      stop = (e) => {
         Mp3Recorder
           .stop()
           .getMp3()
           .then(([buffer, blob]) => {
-           
             const blobURL = URL.createObjectURL(blob)
-            
-            console.log(blobURL)
-            
-            this.setState({ blobURL, startRecording: false,showRecording:true, audioLabel:'Click Proceed to Continue:' });
+            this.setState({file:blob, blobURL, startRecording: false,showRecording:true, audioLabel:'Click Proceed to Continue:' },()=>{
+              this.props.captureAudio(this.state.file)
+              this.props.showProceedBtn(0)
+              
+            });
           }).catch((e) => console.log(e));
+          clearInterval(this.myInterval)
+         
       };
 
       deleteAudio=()=>{
         this.setState({showRecording:false,blobURL:'',startRecording:false,seconds:0,minutes:0,
-        stopRecording:false,micClicked:false,showRecordBtns:false,audioLabel:'Click button below to record Audio:'})
+        stopRecording:false,micClicked:false,showRecordBtns:false,audioLabel:'Click button below to record Audio:'},()=>{
+          this.props.showProceedBtn(1)
+        })
       }
  
     render() {
       const {minutes, seconds}=this.state
         return (
-           
+          
             <div className={`form-group ${this.props.showRecordAudio ? '': 'd-none'}`}>
                <label>{this.state.audioLabel}</label><br/>
                <small className={`text-muted ${this.state.micClicked ? 'd-none':''}`}>Max record time is 2 minutes</small>

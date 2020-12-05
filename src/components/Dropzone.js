@@ -47,7 +47,8 @@ export default class Dropzone extends Component {
   this.state = { hightlight: false ,fileName:'Drag or Drop File',src:'cloudupload.png',openModal:false,
   msg:'',heading:'',file:null,isDisabled:false,uploadState:false,showDropzone:false,showFirst:true,
   showForm:false,showRadio:false,firstBtn:'Next',secondBtn:'Proceed',allowSubmit:true,BrailleOption:null,BrailleOptionError:false,BrailleFont:37,
-  AudioOption:undefined,showAudioForm:false,radioError:false,ifRadioSelected:0,showRecordAudio:false
+  AudioOption:undefined,showAudioForm:false,radioError:false,ifRadioSelected:0,showRecordAudio:false,
+  AudioFile:null
   }
     this.fileInputRef = React.createRef()
     this.openFileDialog = this.openFileDialog.bind(this)
@@ -58,6 +59,20 @@ export default class Dropzone extends Component {
     this.onInputChange = this.onInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateAudioOption = this.updateAudioOption.bind(this)
+  }
+
+  getAudioFile =(audioFile)=>{
+    this.setState({AudioFile:audioFile},()=>{
+      console.log(this.state.AudioFile)
+    })
+  }
+  showOrHideProceed=(no)=>{
+    if(no===0){
+      this.setState({showSecond:true})
+    }
+    else{
+      this.setState({showSecond:false})
+    }
   }
   //Dropzone functions
   openFileDialog() {
@@ -163,7 +178,7 @@ export default class Dropzone extends Component {
   }
 
   updateAudioOption=(e)=>{
-    this.setState({AudioOption:e.target.value,radioError:false},()=>{
+    this.setState({AudioOption:e.target.value,radioError:false,allowSubmit:false},()=>{
       console.log(this.state.AudioOption)
     })
   }
@@ -189,10 +204,12 @@ export default class Dropzone extends Component {
           }
           else if(this.state.ifRadioSelected===2){
             this.setState({showRadio:true,showFirst:false,allowSubmit:false,showForm:false,
-              firstBtn:'Back',showSecond:true,secondBtn:'Next',ifRadioSelected:1})
+              firstBtn:'Back',showSecond:true,secondBtn:'Next',ifRadioSelected:1},()=>{
+                if(this.state.ifRadioSelected===1){
+                  this.setState({showRecordAudio:false})
+                }
+              })
           }
-       
-
       }
     }
   }
@@ -204,7 +221,9 @@ export default class Dropzone extends Component {
     }
     else if(this.state.AudioOption==="1"){
       this.setState({showForm:false,showRecordAudio:true,showSecond:true,showFirst:false,
-        showRadio:false,allowSubmit:true,secondBtn:'Proceed',ifRadioSelected:2})
+        showRadio:false,allowSubmit:true,secondBtn:'Proceed',ifRadioSelected:2},()=>{
+          this.showOrHideProceed(1)
+        })
     }
     else{
       this.setState({radioError:true})
@@ -214,30 +233,61 @@ export default class Dropzone extends Component {
   handleSubmit(event) {
     event.preventDefault();
    let formData = new FormData();
-   formData.append('Upload_File',this.fileInputRef.current.files[0])
-   formData.append('BrailleFont',this.state.BrailleFont)
-   formData.append('BrailleOption',this.state.BrailleOption.value)
-    for(var i of formData){
-      let name=i[0]
-      let value=i[1]
+   if(this.state.BrailleOption.value==="0"||this.state.BrailleOption.value==="1"||this.state.BrailleOption.value==="4"){
+    formData.append('Upload_File',this.fileInputRef.current.files[0])
+    formData.append('BrailleFont',this.state.BrailleFont)
+    formData.append('BrailleOption',this.state.BrailleOption.value)
+     for(var i of formData){
+       let name=i[0]
+       let value=i[1]
+ 
+         console.log(name+':'+value)
+     }
+    const config = {     
+     headers: { 'content-type': 'multipart/form-data' }
+ }
+ 
+     if(this.state.file!==null){
+       axios.post(`http://192.168.43.115:5000/`,formData,config)
+       .then(res => {
+         console.log(res);
+         console.log(res.data);
+       })
+       this.setState({heading: "Success",msg:'Document uploaded successfully',uploadState:true })
+     }
+     else{
+       this.setState({heading: "Error",msg:'No document uploaded' })
+     }
+   }
+   else if(this.state.BrailleOption.value==="2"||this.state.BrailleOption.value==="3"){
+   
+     formData.append('AudioFile',this.state.AudioFile)
+     formData.append('BrailleFont',this.state.BrailleFont)
+     formData.append('BrailleOption',this.state.BrailleOption.value)
+      for(var k of formData){
+       let name=k[0]
+       let value=k[1]
+ 
+         console.log(name+':'+value)
+        }
+      const config = {     
+      headers: { 'content-type': 'multipart/form-data' } 
+      }
+      if(this.state.AudioFile!==null){
+        axios.post(`http://192.168.43.115:5000/`,formData,config).then(res => {
+          console.log(res);
+          console.log(res.data);
+        })
+        this.setState({heading: "Success",msg:'Audio File uploaded successfully',uploadState:true })
+      }
+      else{
+        this.setState({heading: "Error",msg:'No Audio file uploaded' })
+      }
 
-        console.log(name+':'+value)
-    }
-   const config = {     
-    headers: { 'content-type': 'multipart/form-data' }
-}
+      
 
-    if(this.state.file!==null){
-      axios.post(`http://192.168.43.115:5000/`,formData,config)
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-      })
-      this.setState({heading: "Success",msg:'File uploaded successfully',uploadState:true })
-    }
-    else{
-      this.setState({heading: "Error",msg:'No file uploaded' })
-    }
+   }
+   
     this.toggleModal();
     this.trueDisabled(); 
     
@@ -309,7 +359,8 @@ export default class Dropzone extends Component {
       {/*End Radio Buttons */}
 
       {/*Record Audio Component */}
-      <RecordAudio showRecordAudio={this.state.showRecordAudio} />
+      <RecordAudio showRecordAudio={this.state.showRecordAudio} captureAudio={this.getAudioFile} 
+      showProceedBtn={this.showOrHideProceed}/>
       {/* End Record Audio*/}
 
     {/*End Audio Part */}
@@ -318,12 +369,15 @@ export default class Dropzone extends Component {
         </div>
 
       {/*Buttons*/}
+      <div>
       <div className="d-flex form-btns">
       
       <button className="btn mr-2"  type="button" onClick={this.showNext}>{this.state.firstBtn}</button>
 
       <button className={`btn mr-2 ${this.state.showSecond ? '':'disabled d-none'}`} type={`${this.state.allowSubmit ? 'submit':'button'}`} onClick={this.state.allowSubmit ? this.handleSubmit:this.showAudioForm }>{this.state.secondBtn}</button>
       </div>
+      </div>
+     
             </form>
             </div>
           </div>  
