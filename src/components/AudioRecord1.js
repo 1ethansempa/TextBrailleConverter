@@ -7,7 +7,8 @@ export default class AudioRecord1 extends Component {
     constructor(props){
         super(props)
         this.state={micClicked:false,startRecording:false,stopRecording:false,blobURL: '',
-            showRecording:false,isBlocked: false, showRecordBtns:false, audioLabel:'Click button below to record Audio:',
+            showRecording:false,isBlocked: false, showRecordBtns:false,
+            audioLabel:'Click button below to record Audio:',
             minutes:0,seconds:0,file:null
         }
     }
@@ -84,11 +85,12 @@ export default class AudioRecord1 extends Component {
           .then(([buffer, blob]) => {
             const blobURL = URL.createObjectURL(blob)
             this.setState({file:blob, blobURL, startRecording: false,showRecording:true, audioLabel:'Click Proceed to Continue:' },()=>{
-              this.props.captureAudio(this.state.file)
+              this.props.captureAudio(this.state.file,"1.mp3")
               this.props.showProceedBtn(0)
               
             });
           }).catch((e) => console.log(e));
+          
           clearInterval(this.myInterval)
          
       };

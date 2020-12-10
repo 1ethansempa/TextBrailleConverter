@@ -9,14 +9,17 @@
     "@testing-library/user-event": "^7.2.1",
     "audiobuffer-to-wav": "^1.0.0",
     "axios": "^0.21.0",
-    "bootstrap": "^4.5.0",
+    "bootstrap": "^4.0.0-alpha.6",
+    "draft-js": "^0.11.7",
     "fluent-ffmpeg": "^2.1.2",
     "mic-recorder-to-mp3": "^2.2.2",
     "mp3-to-wav": "^0.1.11",
     "react": "^16.13.1",
     "react-bootstrap": "^1.4.0",
     "react-dom": "^16.13.1",
+    "react-draft-wysiwyg": "^1.14.5",
     "react-input-number": "^5.0.19",
+    "react-loader-spinner": "^3.1.14",
     "react-media-recorder": "^1.4.0",
     "react-mic": "^12.4.6",
     "react-numeric-input": "^2.2.3",
@@ -24,6 +27,8 @@
     "react-scripts": "3.4.1",
     "react-select": "^3.1.0",
     "react-speech": "^1.0.2",
+    "react-spinners": "^0.9.0",
+    "react-summernote": "^2.0.2",
     "styled-components": "^5.1.1",
     "xhr": "^2.6.0"
   },
@@ -48,5 +53,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }
