@@ -1,14 +1,20 @@
 from flask import Blueprint,render_template,  request
 from flask import current_app
-import speech_recognition  as sr
+
+from ibm_watson import SpeechToTextV1
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+
+
 from BrailleConverter.Grade1Processing import Grade1Conversion # Import the file with Grade 1 conversion  
 from BrailleConverter.Grade2Processing import Grade2Conversion #Import the file with Grade 2 Conversion
+from pydub import AudioSegment
+from flask_cors import CORS # Attempt at using API, So catering for CORS
 import os
 
 
 Speech2Braille = Blueprint('Speech2Braille', __name__, url_prefix = '/Speech', static_folder = 'static', template_folder = 'Templates')
 
-
+CORS(Speech2Braille)
 #Route to the Speech or audio input form
 @Speech2Braille.route('/', methods = ["GET"])
 
@@ -20,55 +26,61 @@ def Home():
 
 @Speech2Braille.route('/', methods = ["POST"])
 
-def Convert():
+#This function will handle the live recordings which come in the MP3 Format
+def liveConvert():
         
-        Audio = request.files['Upload_File'] # Get Uploaded File
+        Audio = request.files['AudioFile'] # Get Uploaded File
 
-        FontSize = request.form['BrailleFont'] # Get the Font Size
-        print(FontSize)
 
-        BrailleGrade =  request.form['BrailleOption']
-        print(BrailleGrade)
-        """ 
-        FontSize = 24
-        BrailleGrade = "1"
-        """
+        #Set up the IBM Service
+        Authenticator = IAMAuthenticator(current_app.config['API_KEY'])
+        Converter = SpeechToTextV1(authenticator = Authenticator)
+        Converter.set_service_url(current_app.config['IBM_URL'])
 
-        #The recognizer class helps in recognizing of speech
-        Record = sr.Recognizer() # This creates an instance of the recognizer class
 
-        #Going to use the Google web speech API for now
+        Text = Converter.recognize(audio=Audio, content_type='audio/mp3', model='en-US_BroadbandModel', 
+                continuous=True).get_result()
 
-        TextFile = os.path.join(current_app.config['AUDIO_TEXT']) # specify where u want ur text to be written to
+        FinalText = Text['results'][0]['alternatives'][0]['transcript']
+
+        print(type(FinalText))
+        print(FinalText)
+
+        return 'ok'
+
+
+@Speech2Braille.route('/Upload', methods = ["POST"])
+
+def uploadConvert():
+        #Set up the IBM Service
+        Authenticator = IAMAuthenticator(current_app.config['API_KEY'])
+        Converter = SpeechToTextV1(authenticator = Authenticator)
+        Converter.set_service_url(current_app.config['IBM_URL'])
+
+        Audio = request.files['AudioFile'] # Get Uploaded File
+
+        if Audio.filename.endswith('.mp3'):
+
+                Text = Converter.recognize(audio=Audio, content_type='audio/mp3', model='en-US_BroadbandModel', 
+                continuous=True).get_result() 
+
+        elif Audio.filename.endswith('.wav'):
+
+                Text = Converter.recognize(audio=Audio, content_type='audio/wav', model='en-US_BroadbandModel', 
+                continuous=True).get_result()
+
+       
         
-        f = open(TextFile, "a", encoding='UTF-8') # Initialise the text file to be appended to
+        print(Text)
+        #print(Text['results'][0]['alternatives'][0]['transcript'])
 
-        with sr.AudioFile(Audio) as source: # Opening the audio file
-
-                Record.adjust_for_ambient_noise(source, duration=0.5) # removing noise-- has a time effect on the program
-
-                Audio_Data =  Record.record(source) # recording the data to ensure its in the audio content format
-                try:
-                        
-                        Text = Record.recognize_google(Audio_Data, language = "en-US") # Transalating the audio to text
-
-                        f.write(Text) #Write to the intermediary text file 
-
-                except sr.UnknownValueError:
-                        print("File was not clear")
-
-        BrailleOutput = os.path.join(current_app.config['FINAL_OUTPUT']) # specify where u want ur text to be written to
-               
-
-        if BrailleGrade ==  "0":
-                Grade1Conversion.converttograde1(TextFile, BrailleOutput)
-        else:
-                Output = Grade2Conversion.converttograde2(TextFile)
-                with open(BrailleOutput, "a", encoding="utf-8") as BrailleText: # Open a Braille Output text file as  append type
-                        BrailleText.write(Output) 
-        
-
-        return '<h1> ALL GOOD</h1>'  
+        return 'ok'
 
 
 
+#This is a function to convert mp3 files to .wav
+def convertToWav(Audio):
+        Audio = AudioSegment.from_mp3(Audio)
+        Audio.export(os.path.join(current_app.config['WAV_FILE']),  format="wav")
+
+        return Audio
