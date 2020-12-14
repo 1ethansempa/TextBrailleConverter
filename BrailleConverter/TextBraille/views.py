@@ -2,7 +2,12 @@ from flask import Blueprint, render_template,  request, jsonify
 from flask import current_app
 import os
 import pytesseract
+
+import docx2txt
+
 import textract
+
+import fpdf
 
 from BrailleConverter.ImageProcessing import Functions # Import the functions file with Image Pre processing
 from BrailleConverter.Grade1Processing import Grade1Conversion # Import the file with Grade 1 conversion  
@@ -27,24 +32,27 @@ def Home():
 
 def Convert():
         pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' #pointing to the binaries installed
+
+        fpdf.set_global("SYSTEM_TTFONTS", os.path.join(os.path.dirname(__file__),'fonts'))
         
+        """
         FontSize = request.form['BrailleFont'] # Get the Font Size
         print(FontSize)
 
         BrailleGrade =  request.form['BrailleOption']
         print(BrailleGrade)
-        
+        """
         #These are Options to Guide the Conversion
         #Braille Grade value = 1 is to convert to Grade 2
         #Braille Grade Value =  2 is to convert to Grade 1
 
-        """
-        FontSize = 24
-        BrailleGrade = "1"
-        """
-    
         
-        FileName = request.form['FileName']
+        FontSize = 12
+        BrailleGrade = "1"
+        
+    
+        FileName = "test.pdf"
+        #FileName = request.form['FileName']
         print(type(FileName))
         print(FileName)
 
@@ -54,8 +62,8 @@ def Convert():
                 Docx = request.files['Upload_File'] # Get Uploaded File using basic http request
 
                 Docx.save(os.path.join(current_app.config['WORD_DOCS'], Docx.filename)) #Save File
-                text = textract.process(current_app.config['WORD_DOCS'] + "/" + Docx.filename, extension='docx')
-                text = text.decode("utf-8") 
+                text = docx2txt.process(current_app.config['WORD_DOCS'] + "/" + Docx.filename)
+                print(text)
 
                 f = open(TextFile, "a", encoding='UTF-8') # Initialise the text file to be appended to
         
@@ -111,6 +119,18 @@ def Convert():
                 with open(BrailleOutput, "a", encoding="utf-8") as BrailleText: # Open a Braille Output text file as  append type
                         BrailleText.write(Output) 
 
+        BraillePDF = fpdf.FPDF()  # Initialising Braille PDF
+        BraillePDF.add_font("Swell-Braille", style="", fname="Swell-Braille.ttf", uni=True)
+        BraillePDF.add_page() #Adding a Page
+        BraillePDF.set_font("Swell-Braille", size = FontSize) #Set Font Size
+
+        T = open(BrailleOutput, "r", encoding="utf8") 
+
+        for x in T:
+                BraillePDF.cell(200, 10, txt = x, ln = 1, align = 'L') 
+
+
+        BraillePDF.output(current_app.config['BRAILLE_PDF'] + "/" + "mygfg.pdf") 
 
         return '<h1> ALL GOOD</h1>'    
                 

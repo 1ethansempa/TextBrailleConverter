@@ -59,7 +59,33 @@ contractions = {'but': chr(10243),
                 'his': chr(10278),
                 'in': chr(10260),
                 'was': chr(10292),
-                'to': chr(10262)
+                'to': chr(10262),
+                'above': chr(10241)+chr(10243)+chr(10279), #abv
+                'about': chr(10241)+chr(10243), #ab
+                'according': chr(10241)+chr(10249),  #ac
+                'across' : chr(10241)+chr(10249)+chr(10263), #acr
+                'after' : chr(10241)+chr(10251), #af
+                'afternoon' : chr(10241)+chr(10251)+chr(10269), #afn
+                'afterward' : chr(10241)+chr(10251)+chr(10298), #afw
+                'again' : chr(10241)+chr(10267), #ag
+                'against' : chr(10241)+chr(10267)+chr(10252), #ag/
+                'almost' : chr(10241)+chr(10247)+chr(10253), #alm
+                'already' : chr(10241)+chr(10247)+chr(10263),  #alr
+                'also' : chr(10241)+chr(10247),  #al
+                #'although' : chr(10241)+chr(10247)+chr(10278), #al?
+                'altogether' : chr(10241)+chr(10247)+chr(10270), #alt
+                'always' : chr(10241)+chr(10247)+chr(10298), #alw
+                'beacause': chr(10243)+chr(10249), #2c
+                'before' : chr(10243)+chr(10251), #2f
+                'behind' : chr(10243)+chr(10259), #2h
+                'below' : chr(10243)+chr(10247), #2l
+                'beneath' : chr(10243)+chr(10269), #2n
+                'beside' : chr(10243)+chr(10254), #2s
+                'between' : chr(10243)+chr(10270), #2t
+                'beyond' : chr(10243)+chr(10301), #2y
+                'blind' : chr(10243)+chr(10247), #2l
+                'braille': chr(10243)+chr(10263)+chr(10247), #brl
+                #'cannot' : 
             }
 
 punctuation = {',': chr(10242),

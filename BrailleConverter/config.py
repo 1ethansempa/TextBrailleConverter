@@ -20,6 +20,6 @@ class DevelopmentConfig(Config):
     FINAL_OUTPUT = os.environ.get("FINAL_OUTPUT")
     AUDIO_TEXT = os.environ.get("AUDIO_TEXT")
     WAV_FILE = os.environ.get("WAV_FILE")
-
+    BRAILLE_PDF = os.environ.get("BRAILLE_PDF")
     API_KEY = os.environ.get("IBM_API_KEY")
     IBM_URL = os.environ.get("IBM_URL")
