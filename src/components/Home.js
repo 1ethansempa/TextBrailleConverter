@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom';
 const Paragraph = styled.p`
   font-size: 16px;
   color:#6c757d!important;
+  width:350px;
 `;
 
 /*
@@ -22,8 +23,7 @@ export default class Home extends Component {
         return (
             <div className="container">
 <div className="row">
-                        <div className="col-sm-4"></div>
-                        <div className="col-sm-6">
+                        <div className="topBar">
 
                            {/*<Heading>Welcome!</Heading>*/}
                            <div className="header-img-container mb-2">
@@ -37,15 +37,14 @@ export default class Home extends Component {
                               </Paragraph>
                             </div>
                          
-                        <div className="col-sm-4"></div>          
+                                  
           </div>
           <div className="row">
-                        <div className="col-sm-4 col-lg-4"></div>
-                        <div className="col-sm-6 col-lg-6">
+                       <div className="myForm">
                             {/*form component*/}
                              <Form/> 
                             </div>
-                        <div className="col-sm-4"></div>          
+                              
           </div>             
 </div>
         )}

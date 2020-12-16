@@ -5,11 +5,11 @@ import draftToHtml from 'draftjs-to-html';
 
 //import htmlToDraft from 'html-to-draftjs';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-export default class TextArea extends Component {
+export default class CorrectForm extends Component {
    constructor(props) {
    super(props);
    this.state = {
-     editorState: this.props.editorText
+     editorState: EditorState.createEmpty()
      };
    }
  onEditorStateChange = editorState => {
@@ -47,3 +47,4 @@ return (
  
 );
 } }
+

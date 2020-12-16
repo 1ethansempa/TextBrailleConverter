@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
 import MicRecorder from 'mic-recorder-to-mp3';
+import uuid from "react-uuid";
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 export default class AudioRecord1 extends Component {
     
     constructor(props){
         super(props)
+        
         this.state={micClicked:false,startRecording:false,stopRecording:false,blobURL: '',
             showRecording:false,isBlocked: false, showRecordBtns:false,
             audioLabel:'Click button below to record Audio:',
-            minutes:0,seconds:0,file:null
+            minutes:0,seconds:0,file:null,showProceed:0
         }
     }
    //componentDidMount(){}
@@ -84,7 +86,11 @@ export default class AudioRecord1 extends Component {
           .getMp3()
           .then(([buffer, blob]) => {
             const blobURL = URL.createObjectURL(blob)
-            this.setState({file:blob, blobURL, startRecording: false,showRecording:true, audioLabel:'Click Proceed to Continue:' },()=>{
+            
+            var filename = uuid();
+            const file1 = new File([blob], filename+'.mp3', { type: blob.type })
+            this.setState({file:file1, blobURL, startRecording: false,showRecording:true, audioLabel:'Click Proceed to Continue:' },()=>{
+           
               this.props.captureAudio(this.state.file,"1.mp3")
               this.props.showProceedBtn(0)
               

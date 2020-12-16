@@ -54,6 +54,7 @@ export default class Firstpart extends Component {
         this.props.captureBrailleFont(this.state.BrailleFont)
       });
     }
+    
     render() {
         const BrailleOption=this.state.BrailleOption;
         return (

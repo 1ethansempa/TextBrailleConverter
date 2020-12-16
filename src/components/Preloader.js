@@ -22,7 +22,7 @@ const Heading = styled.h2`
     render() {
      return(
      <div className="header-img-container mb-2 mt-5">
-          <Heading>Your braille file is being processed.</Heading>
+          <Heading>{this.props.ProcessingText}</Heading>
           <Heading>Please don't refresh or go back</Heading>
           <ClipLoader
         css={override}

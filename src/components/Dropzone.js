@@ -12,7 +12,7 @@ export default class Dropzone extends Component {
   //set state and binded functions
   constructor(props) {
   super(props)
-  this.state = { hightlight: false ,fileName:'Drag or Drop File',src:'cloudupload.png',openModal:false,
+  this.state = { hightlight: false ,fileName:'Drag/Drop File',src:'cloudupload.png',openModal:false,
   msg:'',heading:'',file:null,isDisabled:false,uploadState:false
   }
     this.fileInputRef = React.createRef()
@@ -44,7 +44,7 @@ export default class Dropzone extends Component {
         if(ext==="docx"||ext==="doc"||ext==="pdf"){
           const array = this.fileListToArray(files)
           this.props.onFilesAdded(array)
-          this.props.captureDoc(this.fileInputRef.current.files[0])
+          this.props.captureDoc(this.fileInputRef.current.files[0],name,ext)
           
           this.setState({file: files}, () => {
             console.log('file', this.state.file);
