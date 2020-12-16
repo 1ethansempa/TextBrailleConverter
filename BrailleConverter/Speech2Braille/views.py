@@ -58,6 +58,7 @@ def uploadConvert():
         Converter.set_service_url(current_app.config['IBM_URL'])
 
         Audio = request.files['AudioFile'] # Get Uploaded File
+        print("test")
 
         if Audio.filename.endswith('.mp3'):
 
@@ -71,10 +72,6 @@ def uploadConvert():
 
        
         Output = Text['results'][0]['alternatives'][0]['transcript']
-
-        p = Punctuator('model.pcl')
-        print(p.punctuate(Output))
-        
 
         return jsonify(Output)
 

@@ -138,20 +138,21 @@ def Convert():
         BraillePDF.set_font("Swell-Braille", size = FontSize) #Set Font Size
 
         Pdf_ID = uuid.uuid1()
+        Pdf_ID =  str(Pdf_ID)
 
-        T = open(BrailleOutput, "r", encoding="utf8") 
+        T = open(BrailleOutput, "r+" , encoding="utf8") 
 
         for x in T:
                 BraillePDF.cell(200, 10, txt = x, ln = 1, align = 'L') 
 
 
-        BraillePDF.output(current_app.config['BRAILLE_PDF'] + "/" + "test.pdf") 
+        BraillePDF.output(current_app.config['BRAILLE_PDF'] + "/" + Pdf_ID +".pdf") 
 
         T.truncate(0) # Clear contents of .txt Might later go with multiple files
 
         T.close() # Close the text file instance
 
-        return send_from_directory(current_app.config['BRAILLE_PDF'], 'test.pdf', mimetype='application/pdf')                
+        return send_from_directory(current_app.config['BRAILLE_PDF'], Pdf_ID +".pdf", mimetype='application/pdf')                
 
 
 
