@@ -3,6 +3,8 @@ from flask import current_app
 import os
 import pytesseract
 
+from gingerit.gingerit import GingerIt
+
 import docx2txt
 import platform
 import textract
@@ -110,7 +112,12 @@ def Convert():
 
                 for Image in Images:
                 
-                        text = str(((pytesseract.image_to_string(Image) ))) # Calling Pytesseract converter
+                        Text = str(((pytesseract.image_to_string(Image) ))) # Calling Pytesseract converter
+
+                        parser = GingerIt()
+                        correction =  parser.parse(Text)
+
+                        text = correction['corrections']
 
                         f.write(text) # Append text to csv 
 

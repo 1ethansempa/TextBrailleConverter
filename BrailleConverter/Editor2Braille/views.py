@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,  request, jsonify
+from flask import Blueprint,render_template,  request, jsonify, send_from_directory
 from flask import current_app
 
 from BrailleConverter.Grade1Processing import Grade1Conversion # Import the file with Grade 1 conversion  
@@ -19,26 +19,26 @@ CORS(Editor2Braille)
 @Editor2Braille.route('/', methods = ["POST"])
 def Editor():
 
-    fpdf.set_global("SYSTEM_TTFONTS", os.path.join(os.path.dirname(__file__),'fonts'))
+        fpdf.set_global("SYSTEM_TTFONTS", os.path.join(os.path.dirname(__file__),'fonts'))
 
-    Text = request.form['RichEditorText']
+        Text = request.form['RichEditorText']
 
-    FontSize = request.form['BrailleFont'] # Get the Font Size
-    FontSize =  int(FontSize)
+        FontSize = request.form['BrailleFont'] # Get the Font Size
+        FontSize =  int(FontSize)
 
-    BrailleGrade =  request.form['BrailleOption']
+        BrailleGrade =  request.form['BrailleOption']
 
-    TextFile = os.path.join(current_app.config['TEXT_FILE']) # specify where u want ur text to be written to
+        TextFile = os.path.join(current_app.config['TEXT_FILE']) # specify where u want ur text to be written to
 
-    f = open(TextFile, "a", encoding='UTF-8') # Initialise the text file to be appended to
+        f = open(TextFile, "a", encoding='UTF-8') # Initialise the text file to be appended to
         
-    f.truncate(0) # Clear contents of .txt Might later go with multiple files. But did not
+        f.truncate(0) # Clear contents of .txt Might later go with multiple files. But did not
 
-    f.write(text) # Append text to csv 
+        f.write(Text) # Append text to csv 
 
-    f.close() # Close the text file instance
+        f.close() # Close the text file instance
 
-    BrailleOutput = os.path.join(current_app.config['FINAL_OUTPUT']) # specify where u want ur text to be written to
+        BrailleOutput = os.path.join(current_app.config['FINAL_OUTPUT']) # specify where u want ur text to be written to
 
         if BrailleGrade ==  "0":
                 Grade1Conversion.converttograde1(TextFile, BrailleOutput)
@@ -53,8 +53,9 @@ def Editor():
         BraillePDF.set_font("Swell-Braille", size = FontSize) #Set Font Size
 
         Pdf_ID = uuid.uuid1()
+        Pdf_ID =  str(Pdf_ID)
 
-        T = open(BrailleOutput, "r", encoding="utf8") 
+        T = open(BrailleOutput, "r+", encoding="utf8") 
 
         for x in T:
                 BraillePDF.cell(200, 10, txt = x, ln = 1, align = 'L') 
