@@ -1,4 +1,38 @@
-967 people is Knowledge
+Overview
 
-But we try.
+Eden Technologies is a private digital solutions company that develops innovative and creative
+software products that meet the particular needs of your organization. We have been in business
+since 2019 with an in-house team of highly-skilled software developers, web designers and IT
+personnel who work tirelessly to bring you products that fit seamlessly into your organization. In
+the creation of our budget-conscious solutions, we ensure to co-design with the various end-users
+which is a sure-fire way of addressing the nuanced differences between the different expectations
+they have of the same product. We are devoted to developing solutions that bring you real value
+and great user experience.
+
+Problem Statement
+
+Currently, there is a limited number of computers from which teachers can enter results into the
+system. The ratio of these computers to teachers is currently 2:35 which can be quite
+inconveniencing for the teachers who have to wait in line in order to feed their marks into the
+system.
+
+Proposal
+
+Eden Technologies proposes to develop a robust system that offers convenience to two
+stakeholders in the school namely; the teaching staff and the parents.
+
+Firstly, the system will offer authorized staff 24-hour access to the marks system which will enable
+them to feed in grades at any time and place of their convenience. With this kind of arrangement,
+we need to assure the administration of top-notch data protection and security. To this end, we will
+attribute unique passcodes and permissions to all personnel who have access the system. This
+implies that staff will have either editing or viewing privileges depending on the section of the
+platform they choose to engage with. It is noteworthy that certain sections will only be accessed
+by a select few on the authority of the school administration.
+
+The same system will also serve as a digital platform from which parents and students can access
+end of term reports. The value proposition of this is that the school can save money on the reams
+of paper used to print report cards every term while also ensuring that the grades are not
+unscrupulously changed by some students in a bid to falsely please their parents. Being the first
+traditional school to make such a move will further bring Namilyango College its much deserved
+reverence as an education institution that is responsive to the changes the digital era comes with.
 

@@ -59,7 +59,6 @@ def getWords(Text_File):
             pass
         else:
             result.append(word)
-    print(result)
     return result
 
 #This function will check for numbers in a word and convert the numbers to braille

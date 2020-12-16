@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,  request
+from flask import Blueprint,render_template,  request, jsonify
 from flask import current_app
 
 from ibm_watson import SpeechToTextV1
@@ -46,7 +46,7 @@ def liveConvert():
         print(type(FinalText))
         print(FinalText)
 
-        return 'ok'
+        return jsonify(FinalText)
 
 
 @Speech2Braille.route('/Upload', methods = ["POST"])
@@ -70,11 +70,13 @@ def uploadConvert():
                 continuous=True).get_result()
 
        
-        
-        print(Text)
-        #print(Text['results'][0]['alternatives'][0]['transcript'])
+        Output = Text['results'][0]['alternatives'][0]['transcript']
 
-        return 'ok'
+        p = Punctuator('model.pcl')
+        print(p.punctuate(Output))
+        
+
+        return jsonify(Output)
 
 
 

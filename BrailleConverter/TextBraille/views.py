@@ -1,13 +1,15 @@
-from flask import Blueprint, render_template,  request, jsonify
+from flask import Blueprint, render_template,  request, jsonify, send_from_directory
 from flask import current_app
 import os
 import pytesseract
 
 import docx2txt
-
+import platform
 import textract
 
 import fpdf
+
+import uuid
 
 from BrailleConverter.ImageProcessing import Functions # Import the functions file with Image Pre processing
 from BrailleConverter.Grade1Processing import Grade1Conversion # Import the file with Grade 1 conversion  
@@ -25,34 +27,38 @@ CORS(TextBraille)
 @TextBraille.route('/', methods = ["GET"])
 
 def Home():
+        print()
         return render_template('index.html')
 
 
 @TextBraille.route('/', methods = ["POST"])
 
 def Convert():
-        pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' #pointing to the binaries installed
+        if platform.system() == 'Windows':
+                pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' #pointing to the binaries installed
+                
 
         fpdf.set_global("SYSTEM_TTFONTS", os.path.join(os.path.dirname(__file__),'fonts'))
         
-        """
+
         FontSize = request.form['BrailleFont'] # Get the Font Size
+        FontSize =  int(FontSize)
         print(FontSize)
 
         BrailleGrade =  request.form['BrailleOption']
         print(BrailleGrade)
-        """
+        
         #These are Options to Guide the Conversion
         #Braille Grade value = 1 is to convert to Grade 2
         #Braille Grade Value =  2 is to convert to Grade 1
 
-        
+        """
         FontSize = 12
         BrailleGrade = "1"
-        
+        """
     
-        FileName = "test.pdf"
-        #FileName = request.form['FileName']
+        #FileName = "test.pdf"
+        FileName = request.form['FileName']
         print(type(FileName))
         print(FileName)
 
@@ -124,16 +130,21 @@ def Convert():
         BraillePDF.add_page() #Adding a Page
         BraillePDF.set_font("Swell-Braille", size = FontSize) #Set Font Size
 
+        Pdf_ID = uuid.uuid1()
+
         T = open(BrailleOutput, "r", encoding="utf8") 
 
         for x in T:
                 BraillePDF.cell(200, 10, txt = x, ln = 1, align = 'L') 
 
 
-        BraillePDF.output(current_app.config['BRAILLE_PDF'] + "/" + "mygfg.pdf") 
+        BraillePDF.output(current_app.config['BRAILLE_PDF'] + "/" + "test.pdf") 
 
-        return '<h1> ALL GOOD</h1>'    
-                
+        T.truncate(0) # Clear contents of .txt Might later go with multiple files
+
+        T.close() # Close the text file instance
+
+        return send_from_directory(current_app.config['BRAILLE_PDF'], 'test.pdf', mimetype='application/pdf')                
 
 
 

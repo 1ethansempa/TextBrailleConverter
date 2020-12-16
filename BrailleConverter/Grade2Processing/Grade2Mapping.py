@@ -83,9 +83,75 @@ contractions = {'but': chr(10243),
                 'beside' : chr(10243)+chr(10254), #2s
                 'between' : chr(10243)+chr(10270), #2t
                 'beyond' : chr(10243)+chr(10301), #2y
-                'blind' : chr(10243)+chr(10247), #2l
+                'blind' : chr(10243)+chr(10247), #2l     
                 'braille': chr(10243)+chr(10263)+chr(10247), #brl
-                #'cannot' : 
+                'cannot':chr(10296)+chr(10249), #_c 
+                'conceive': chr(10249)+chr(10249)+ chr(10279),
+          #3cv, 3 is incorrect
+                'concieving': chr(10249)+chr(10249)+ chr(10279)+ chr(10267), #same as above
+                'could': chr(10249)+ chr(10265), #cd
+                'day': chr(10242)+chr(10265), #"d 
+                'declaring': chr(10265)+ chr(10249) + chr(10247)+ chr(10267), #dclg
+                'deceive': chr(10265)+chr(10249)+chr(10279), #dcv
+                'deceiving': chr(10265)+chr(10249)+chr(10279)+chr(10267), #dcvg
+                'either': chr(10257)+chr(10250), #ei
+                'ever': chr(10278)+ chr(10257), #"e inequivalent
+                'father': chr(10242)+chr(10251), #"f
+                'friend': chr(10251)+chr(10263), #fr
+                'good': chr(10267)+chr(10265), #gd
+                'great': chr(10267)+chr(10263)+chr(10270), #grt
+                'had': chr(10296)+chr(10259), #_h 
+                'here': chr(10242)+chr(10259), #"h
+                'him': chr(10259)+chr(10253), #hm
+                'himself': chr(10259)+chr(10253)+chr(10251), #hmf
+                'immediate': chr(10250)+chr(10253)+chr(10253), #imm
+                'letter': chr(10247)+chr(10263), #lr
+                'itself': chr(10285)+chr(10251), #xf
+                'little': chr(10247)+chr(10247), #ll
+                'lord': chr(10242)+chr(10247), #"l
+                'many': chr(10296)+chr(10253), #_m
+                'mother': chr(10242)+chr(10253), #"m
+                'must':chr(10253)+chr(10252), #m/
+                'myself': chr(10253)+chr(10301)+chr(10251), #myf
+                'name': chr(10242)+chr(10269), #"n
+                'necessary': chr(10269)+chr(10257)+chr(10249), #nec
+                'neither':chr(10269)+chr(10257)+chr(10250), #nei
+                'one': chr(10242)+chr(10261), #"o
+                'oneself': chr(10242)+chr(10261)+chr(10251), #"of
+                'paid': chr(10255)+chr(10265), #pd
+                'part': chr(10242)+chr(10255), #"p
+                'people': chr(10255), #p
+                'question': chr(10242)+chr(10271), #"q
+                'quick': chr(10271)+chr(10245), #qk
+                'quite':chr(10271), #q
+                'rather':chr(10263), #r
+                'receive': chr(10263)+chr(10249)+chr(10279), #rcv
+                'receiving': chr(10263)+chr(10249)+chr(10279)+chr(10267), #rcvg
+                'rejoice': chr(10263)+chr(10266)+chr(10249), #rjc
+                'rejoicing': chr(10263)+chr(10266)+chr(10249)+chr(10267), #rjcg
+                'right': chr(10242)+chr(10263), #"r
+                'said':chr(10254)+chr(10265), #sd
+                'some':chr(10242)+chr(10254), #"s
+                'spirit': chr(10296)+chr(10254), #_s
+                'still':chr(10252), #/
+                'that': chr(10270), #t
+                'today':chr(10270)+chr(10265), #td
+                'together': chr(10270)+chr(10267)+chr(10263), #tgr
+                'tomorrow': chr(10270)+chr(10253), #tm
+                'tonight': chr(10270)+chr(10269), #tn
+                'under': chr(10242)+chr(10277), #"u
+                'us': chr(10277), #u
+                'very': chr(10279), #v
+                'was': chr(10266),#0
+                'were': chr(10267), #7
+                'will': chr(10298), #w
+                'world': chr(10296)+chr(10298), #_w
+                'would': chr(10298)+chr(10265), #wd
+                'you': chr(10301), #y
+                'young': chr(10242)+chr(10301), #"y
+                'your': chr(10301)+chr(10263), #yr
+                'yourself': chr(10301)+chr(10263)+chr(10251), #yrf
+                'yourselves': chr(10301)+chr(10263)+chr(10279)+chr(10254), #yrvs
             }
 
 punctuation = {',': chr(10242),
