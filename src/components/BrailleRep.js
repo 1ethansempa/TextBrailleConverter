@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import DocViewer,{ DocViewerRenderers} from "react-doc-viewer";
 //import DocViewer,{ PDFRenderer,MSDocRenderer} from "react-doc-viewer";
 
-const docs1=[{uri: require("E://Work/TextBraille/textbraille/src/files/tracking.docx")}]
-const docs2=[{uri: require("E://Work/TextBraille/textbraille/src/files/saformatted.pdf")}]
+const docs1=[{uri: require("E://Work/TextBraille/textbraille/src/files/Report system proposal (NGO).pdf")}]
+const docs2=[{uri: require("E://Work/TextBraille/textbraille/src/files/1.pdf")}]
 
 export default class BrailleRep extends Component {
     render() {

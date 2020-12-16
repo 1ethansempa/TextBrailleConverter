@@ -11,6 +11,7 @@ import TextArea from './TextArea'
 //import BrailleRep from './BrailleRep'
 import { Redirect } from 'react-router-dom'
 import { EditorState } from 'draft-js';
+var fs = require('browserify-fs');
 
 export default class Form extends Component {
 
@@ -24,8 +25,8 @@ export default class Form extends Component {
         showRadio:false,firstBtn:'Back',secondBtn:'Next',allowSubmit:false,
         showAudioForm:false, ifRadioSelected:0,showRecordAudio:false,
         AudioFile:null,isLoading:false,TextCount:0,AudioCount:0,redirect:0,submitCount:0,
-      BrailleFile:null,url:'',RichText:EditorState.createEmpty(),docType:'',falseDoc:false,
-    ProcessingText:''}
+        BrailleFile:null,url:'',RichText:EditorState.createEmpty(),docType:'',falseDoc:false,
+        ProcessingText:'',correctString:''}
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
@@ -188,6 +189,16 @@ export default class Form extends Component {
           })
         }
       }
+      uploadFile(){
+        let reader = new FileReader()
+        reader.readAsDataURL(this.state.document)
+        reader.onload=(e)=>{
+          const url1 = "http://localhost:3000/src/components/files";
+        const FormData ={file:this.state.document}
+        return axios.post(url1,FormData).then(response =>
+          console.warn('result',response))
+        }
+      }
     
       handleSubmit(event) {
       event.preventDefault()
@@ -199,6 +210,7 @@ export default class Form extends Component {
         
             if(this.state.document!==null){
              if(this.state.TextOption===1){
+             
               formData.append('Upload_File',this.state.document)
               formData.append('BrailleFont',this.state.BrailleFont)
               formData.append('BrailleOption',this.state.BrailleOption)
@@ -215,7 +227,7 @@ export default class Form extends Component {
            this.setState({isLoading:true,docError:false,docErrorMsg:'',
            ProcessingText:'Your braille file is being processed.'})
            //`http://192.168.43.115:5000
-               axios.post(`http://localhost:5000/`,formData,config)
+               axios.post(`http://192.168.43.115:5000/`,formData,config)
                .then(res => {
                  console.log(res);
                  console.log(res.data);
@@ -241,7 +253,7 @@ export default class Form extends Component {
              }
              else{
               if(this.state.TextOption===0){
-                formData.append('RichText',this.state.RichText)
+                formData.append('RichEditorText',this.state.RichText.getCurrentContent().getPlainText())
                 formData.append('BrailleFont',this.state.BrailleFont)
                 formData.append('BrailleOption',this.state.BrailleOption)
                 
@@ -257,7 +269,7 @@ export default class Form extends Component {
              this.setState({isLoading:true,docError:false,docErrorMsg:'',
              ProcessingText:'Your braille file is being processed.'})
              //`http://192.168.43.115:5000
-                 axios.post(`http://localhost:5000/`,formData,config)
+                 axios.post(`http://192.168.43.115:5000/Editor/`,formData,config)
                  .then(res => {
                    console.log(res);
                    console.log(res.data);
@@ -300,12 +312,15 @@ export default class Form extends Component {
                   
                     this.setState({isLoading:true,docError:false,docErrorMsg:'',
                     ProcessingText:'Your text is being processed.'})
-                    axios.post(`http://localhost:5000/`,formData,config).then(res => {
+                    axios.post(`http://192.168.43.115:5000/Speech/Upload`,formData,config).then(res => {
                       console.log(res);
                       console.log(res.data);
                      
                       if(res.data){
-                       this.setState({redirect:1})
+                      
+                       this.setState({redirect:1,correctString:res.data},()=>{
+                        
+                       })
                       }
                      
                     })
@@ -322,19 +337,19 @@ export default class Form extends Component {
                       console.log(name+':'+value)
                       this.setState({isLoading:true,docError:false,docErrorMsg:'',
                       ProcessingText:'Your text is being processed.'})
-                      axios.post(`http://localhost:5000/`,formData,config).then(res => {
+                      axios.post(`http://192.168.43.115:5000/Speech/`,formData,config).then(res => {
                         console.log(res);
                         console.log(res.data);
                        
                         if(res.data){
-                         this.setState({redirect:1})
+                         this.setState({redirect:1,correctString:res.data})
                         }
                        
                       })
                      }
                 }
                 else{
-                  
+
                 }
                
               }
@@ -436,7 +451,10 @@ export default class Form extends Component {
         else{
           if(this.state.AudioOption===0||this.state.AudioOption===1){
             return(
-              <Redirect to={{pathname:"/CorrectForm"}}/>
+              <Redirect to={{pathname:"/CorrectForm",
+              state:{correctString:this.state.correctString,
+              BrailleFont:this.state.BrailleFont,
+            BrailleOption:this.state.BrailleOption}}}/>
             )
           }
           else{

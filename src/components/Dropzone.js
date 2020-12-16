@@ -134,7 +134,7 @@ export default class Dropzone extends Component {
           onDragOver={this.onDragOver} onDragLeave={this.onDragLeave}
           onDrop={this.onDrop} onClick={this.openFileDialog} style={{ cursor:  'pointer' }}>
           <input ref={this.fileInputRef} className="FileInput" type="file"
-            accept={`${this.props.audioOrDoc ?'docx, .doc,.pdf':'.wav, .mp3'}`} onChange={this.onFilesAdded} value={this.state.file} />
+            accept={`${this.props.audioOrDoc ?'.docx, .doc,.pdf':'.wav, .mp3'}`} onChange={this.onFilesAdded} value={this.state.file} />
           <img alt="upload" className="Icon" src={this.state.src}/>
           <Span>{this.state.fileName}</Span>
           {/*

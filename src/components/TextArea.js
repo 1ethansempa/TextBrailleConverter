@@ -12,6 +12,7 @@ export default class TextArea extends Component {
      editorState: this.props.editorText
      };
    }
+   
  onEditorStateChange = editorState => {
     this.setState({ editorState });
     this.props.captureRichText(editorState)
