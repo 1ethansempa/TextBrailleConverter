@@ -11,7 +11,6 @@ import TextArea from './TextArea'
 //import BrailleRep from './BrailleRep'
 import { Redirect } from 'react-router-dom'
 import { EditorState } from 'draft-js';
-var fs = require('browserify-fs');
 
 export default class Form extends Component {
 
@@ -26,7 +25,7 @@ export default class Form extends Component {
         showAudioForm:false, ifRadioSelected:0,showRecordAudio:false,
         AudioFile:null,isLoading:false,TextCount:0,AudioCount:0,redirect:0,submitCount:0,
         BrailleFile:null,url:'',RichText:EditorState.createEmpty(),docType:'',falseDoc:false,
-        ProcessingText:'',correctString:''}
+        ProcessingText:'',correctString:'',BrailleRepName1:''}
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
@@ -77,10 +76,8 @@ export default class Form extends Component {
     }
     getDocument =(doc,filename,ext) =>{
       if(this.state.dropzoneType){
-        this.setState({document:doc,docName:filename,docError:false},()=>{
-          if(ext==='docx'||'doc'){
-            this.setState({doctype:'word'})
-          }
+        this.setState({document:doc,docName:filename,docError:false,docType:ext},()=>{
+         
           console.log(this.state.document)
           console.log(this.state.docType)
           console.log(filename)
@@ -209,8 +206,8 @@ export default class Form extends Component {
           if(this.state.BrailleOption==="0"||this.state.BrailleOption==="1"||this.state.BrailleOption==="4"){
         
             if(this.state.document!==null){
-             if(this.state.TextOption===1){
-             
+              if(this.state.TextOption===1){
+             /*
               formData.append('Upload_File',this.state.document)
               formData.append('BrailleFont',this.state.BrailleFont)
               formData.append('BrailleOption',this.state.BrailleOption)
@@ -219,14 +216,25 @@ export default class Form extends Component {
                  let name=i[0]
                  let value=i[1]
                    console.log(name+':'+value)
+               }*/
+               formData.append('file',this.state.document)
+            
+               for(var i of formData){
+                 let name=i[0]
+                 let value=i[1]
+                   console.log(name+':'+value)
                }
               const config = {     
                headers: { 'content-type': 'multipart/form-data',
-               "Access-Control-Allow-Origin": "*" }
+               "Access-Control-Allow-Origin": "*",
+               "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+               "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, DELETE"
+               }
            }
            this.setState({isLoading:true,docError:false,docErrorMsg:'',
            ProcessingText:'Your braille file is being processed.'})
            //`http://192.168.43.115:5000
+           /*
                axios.post(`http://192.168.43.115:5000/`,formData,config)
                .then(res => {
                  console.log(res);
@@ -235,13 +243,24 @@ export default class Form extends Component {
                  if(res.data){
                   this.setState({redirect:1})
                  }
+               })*/
+
+               axios.post(`http://localhost:4000/PostFile`,formData,config)
+               .then(res => {
+                 console.log(res);
+                
+                
+                 if(res.data){
+                  this.setState({BrailleRepName1:res.data.name})
+                  this.setState({redirect:1})
+                 }
+                 console.log(this.state.BrailleRepName1)
                })
+
  
                if(this.docType==='word'){
                  this.setState({falseDoc:true})
                }
-              
-              
                //this.setState({heading: "Success",msg:'Document uploaded successfully',uploadState:true })
              }
 
@@ -460,7 +479,8 @@ export default class Form extends Component {
           else{
             return(
               <Redirect to={{pathname:"/BrailleRep",
-            state:{document:this.state.document}}}/>
+            state:{document:this.state.document,
+                  filename1:this.state.BrailleRepName1}}}/>      
             )
           }
         

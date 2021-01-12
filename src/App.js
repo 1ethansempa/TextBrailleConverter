@@ -20,6 +20,7 @@ function App() {
    <Navbar/>
    <Switch>
    <Route exact path="/" component={Home}/>
+   <Route path="/Home" component={Home}/>
      <Route path="/Help" component={Help}/>
      <Route path="/BrailleRep" component={BrailleRep}/>
      <Route path="/Preloader" component={Preloader}/>

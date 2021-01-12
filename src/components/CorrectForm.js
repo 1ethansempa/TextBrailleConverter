@@ -5,6 +5,7 @@ import draftToHtml from 'draftjs-to-html';
 import axios from 'axios';
 import Preloader from './Preloader'
 import { Redirect } from 'react-router-dom'
+import IdleTimer from 'react-idle-timer'
 
 //import htmlToDraft from 'html-to-draftjs';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -12,12 +13,39 @@ export default class CorrectForm extends Component {
    constructor(props) {
    super(props);
    this.state = {
-     editorState: EditorState.createWithContent(ContentState.createFromText(
-         this.props.location.state.correctString)),
-         isLoading:false,redirect:0
+    editorState: 
+    EditorState.createWithContent(ContentState.createFromText(
+    this.props.location.state.correctString)),
+    isLoading:false,redirect:0,
+    //15 minute timeout
+    timeout:1000 * 900 * 1,
+    isTimedOut:false
      //this.props.location.state.correctString
      };
+     this.idleTimer=null;
+     this.onAction= this._onAction.bind(this)
+     this.onActive= this._onActive.bind(this)
+     this.onIdle= this._onIdle.bind(this)
    }
+   _onAction(e){
+    console.log('Something was done',e)
+    this.setState({isTimedOut:false})
+}
+_onActive(e){
+    console.log('User is active',e)
+    this.setState({isTimedOut:false})
+}
+_onIdle(e){
+    console.log('User is idle',e)
+    const isTimedOut= this.state.isTimedOut
+    if(isTimedOut){
+        this.setState({redirect:2})
+    }
+    else{
+        this.idleTimer.reset();
+        this.setState({isTimedOut:true})
+    }
+}
  onEditorStateChange = editorState => {
     this.setState({ editorState });
     this.props.captureRichText(editorState)
@@ -59,10 +87,16 @@ export default class CorrectForm extends Component {
 
 render() {
 const { editorState } = this.state;
+var HomeURL="/"
 if(!this.state.isLoading)
 {
     return (
         <div className="text-editor1">
+           <IdleTimer ref={ref => {this.idleTimer = ref}}
+            onActive={this.onActive}  onIdle={this.onIdle}
+            onAction={this.onAction} element={document}
+            timeout={this.state.timeout}
+            />
           <Editor
             toolbar={{ options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'history'],
             blockType: {
@@ -86,9 +120,7 @@ if(!this.state.isLoading)
                       
                         <button className={`btn mr-2`} 
                         onClick={this.transformToBraille} type={`button`}>Proceed</button>
-                        </div>
-      
-            
+                        </div>   
         </div>
        
       );
@@ -100,10 +132,15 @@ else{
             <Preloader ProcessingText={`Your braille file is being processed`}/>     
         )
     }
-    else{
+    else if(this.state.redirect===1){
         return(
             <Redirect to={{pathname:"/BrailleRep"}}/>
         )
+    }
+    else{
+      return(
+        <Redirect to={{HomeURL}}/>
+    )
     }
     
 }
