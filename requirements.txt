@@ -50,7 +50,7 @@ textract==1.6.3
 Theano==1.0.5
 tqdm==4.54.1
 tzlocal==1.5.1
-urllib3==1.26.2
+urllib3==1.26.5
 websocket-client==0.48.0
 Werkzeug==1.0.1
 xlrd==1.2.0
